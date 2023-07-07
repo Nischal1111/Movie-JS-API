@@ -2,14 +2,28 @@ const searchInput = document.getElementById('search-input');
 const searchButton = document.getElementById('search-button');
 const movieResults = document.getElementById('movie-results');
 
-searchButton.addEventListener('click', () => {
-  const searchTerm = searchInput.value;
-  if (searchTerm !== '') {
-    fetchMovieData(searchTerm);
-  } else {
-    alert('Please enter a movie title');
+// searchButton.addEventListener('click', () => {
+//   const searchTerm = searchInput.value;
+//   if (searchTerm !== '') {
+//     fetchMovieData(searchTerm);
+//   } else {
+//     alert('Please enter a movie title');
+//   }
+// });
+
+searchInput.addEventListener('keydown', (event) => {
+  const searchTerm = searchInput.value
+  if(event.key==="Enter"){
+    event.preventDefault()
+    searchButton.click()
+    if (searchTerm !== '') {
+      fetchMovieData(searchTerm);
+    } else {
+      alert('Please enter a movie title');
+    }
   }
 });
+
 
 async function fetchMovieData(searchTerm) {
   const apiUrl = `http://www.omdbapi.com/?apikey=c8bd318d&s=${searchTerm}`;
@@ -17,7 +31,7 @@ async function fetchMovieData(searchTerm) {
   if (data.Response === 'True') {
     displayMovieResults(data.Search);
   } else {
-    displayError(data.Error);
+    displayError("Movie Not found !!!");
   }
 }
 
@@ -32,6 +46,6 @@ function displayMovieResults(results) {
     </div> `);
 }
 
-function displayError(errorMessage) {
-  movieResults.innerHTML = `<p class="error">${errorMessage}</p>`;
+function displayError() {
+  movieResults.innerHTML = `<p class="error">Movie Not Found !!!</p>`;
 }
